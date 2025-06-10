@@ -10,6 +10,7 @@ import {
   DollarSign,
   Banknote,
 } from "lucide-react"
+import useToast from "../hooks/useToast"
 
 // Заглушки для демонстрации (в реальном проекте замените на настоящие импорты)
 
@@ -82,6 +83,8 @@ export default function SignUp() {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
 
+  const notify = useToast()
+
   const {
     register,
     handleSubmit,
@@ -131,11 +134,11 @@ export default function SignUp() {
 
     try {
       await instance.post("auth/signUp", formData)
-      alert("Успешная регистрация")
+      notify("Успешная регистрация")
       navigate("/auth/signin")
     } catch (err) {
       console.error("Ошибка регистрации:", err)
-      alert("Ошибка регистрации")
+      notify("Ошибка регистрации", "error")
     } finally {
       setIsLoading(false)
     }

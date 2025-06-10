@@ -9,6 +9,7 @@ import { useState, type ChangeEvent, type FC } from "react"
 import { useNavigate } from "react-router-dom"
 import type { UserType } from "../utils/types"
 import { instance } from "../service/instance"
+import useToast from "../hooks/useToast"
 
 type TransferProps = {
   user: UserType
@@ -32,6 +33,7 @@ const Transfer: FC<TransferProps> = ({ user }) => {
   const [payment, setPayment] = useState("VISA")
   const [isLoading, setIsLoading] = useState(false)
 
+  const notify = useToast()
   const navigate = useNavigate()
 
   const apiLink =
@@ -62,13 +64,13 @@ const Transfer: FC<TransferProps> = ({ user }) => {
     }
     try {
       await instance.post(apiLink, formData)
-      alert("Перевод выполнен успешно")
+      notify("Перевод выполнен успешно")
       setAmount("")
       setOtherCardNumber("")
       setCardPassword("")
     } catch (err) {
       console.error(err)
-      alert("Произошла ошибка при пополнении счета")
+      notify("Произошла ошибка при пополнении счета", "error")
     } finally {
       setIsLoading(false)
     }
@@ -221,7 +223,7 @@ const Transfer: FC<TransferProps> = ({ user }) => {
             </div>
 
             {/* Submit Button */}
-            <div
+            <button
               onClick={handleDeposit}
               className={`group mt-8 flex w-full transform cursor-pointer items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 py-4 font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:from-green-700 hover:to-emerald-700 hover:shadow-xl ${
                 isLoading ? "cursor-not-allowed opacity-50" : ""
@@ -238,7 +240,7 @@ const Transfer: FC<TransferProps> = ({ user }) => {
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </>
               )}
-            </div>
+            </button>
 
             <button
               onClick={() => navigate("/")}

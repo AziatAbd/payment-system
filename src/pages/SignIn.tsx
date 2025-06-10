@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { instance } from "../service/instance"
 import type { UserType } from "../utils/types"
+import useToast from "../hooks/useToast"
 
 type FormData = {
   cardNumber: string
@@ -36,6 +37,8 @@ const mockLogin = async ({ cardNumber, password }: FormData) => {
 export default function SignIn({ onLogin }: SignInProps) {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
+  const notify = useToast()
 
   const {
     register,
@@ -63,7 +66,7 @@ export default function SignIn({ onLogin }: SignInProps) {
       mockNavigate("/")
     } catch (err) {
       console.error(err)
-      alert("Ошибка входа. Проверьте данные.")
+      notify("Ошибка входа. Проверьте данные.", "error")
     } finally {
       setIsLoading(false)
     }

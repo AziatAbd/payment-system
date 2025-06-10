@@ -1,8 +1,9 @@
-import { useState, type FC } from "react"
+import { useState, type FC, type FormEvent } from "react"
 import { CreditCard, Lock, ArrowRight } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { instance } from "../service/instance"
 import type { UserType } from "../utils/types"
+import useToast from "../hooks/useToast"
 
 type WithdrawProps = {
   user: UserType
@@ -13,6 +14,7 @@ const Withdraw: FC<WithdrawProps> = ({ user }) => {
   const [cardPassword, setCardPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
+  const notify = useToast()
   const navigate = useNavigate()
 
   const apiLink =
@@ -20,7 +22,8 @@ const Withdraw: FC<WithdrawProps> = ({ user }) => {
       ? "/visa/debitingVisa"
       : "/master/debitingMaster"
 
-  const handleWithdraw = async () => {
+  const handleWithdraw = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     if (!amount || !cardPassword) {
       alert("Пожалуйста, заполните все поля")
       return
@@ -36,12 +39,13 @@ const Withdraw: FC<WithdrawProps> = ({ user }) => {
         summa: parseFloat(amount),
       })
 
-      alert("Снятие успешно выполнено")
+      notify("Снятие успешно выполнено")
+      navigate(-1)
       setAmount("")
       setCardPassword("")
     } catch (err) {
       console.error(err)
-      alert("Произошла ошибка при снятии средств")
+      notify("Произошла ошибка при снятии средств", "error")
     } finally {
       setIsLoading(false)
     }
@@ -67,7 +71,7 @@ const Withdraw: FC<WithdrawProps> = ({ user }) => {
             </p>
           </div>
 
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleWithdraw}>
             {/* PIN Input */}
             <div className="relative">
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
@@ -103,7 +107,7 @@ const Withdraw: FC<WithdrawProps> = ({ user }) => {
 
             {/* Submit Button */}
             <button
-              onClick={handleWithdraw}
+              type="submit"
               className="group flex w-full transform cursor-pointer items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-600 to-pink-600 py-4 font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:from-red-700 hover:to-pink-700 hover:shadow-lg disabled:scale-100 disabled:cursor-not-allowed disabled:from-gray-600 disabled:to-gray-700"
             >
               {isLoading ? (

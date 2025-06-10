@@ -3,6 +3,7 @@ import { Lock, Plus, TrendingUp, CheckCircle } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { instance } from "../service/instance"
 import type { UserType } from "../utils/types"
+import useToast from "../hooks/useToast"
 
 type DepositProps = {
   user: UserType
@@ -12,6 +13,7 @@ const Deposit: FC<DepositProps> = ({ user }) => {
   const [amount, setAmount] = useState("")
   const [cardPassword, setCardPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const notify = useToast()
 
   const navigate = useNavigate()
 
@@ -37,12 +39,13 @@ const Deposit: FC<DepositProps> = ({ user }) => {
     try {
       await instance.post(apiLink, formData)
 
-      alert("Счёт пополнен")
+      notify("Счёт пополнен")
+      navigate(-1)
       setAmount("")
       setCardPassword("")
     } catch (err) {
       console.error(err)
-      alert("Произошла ошибка при пополнении счета")
+      notify("Произошла ошибка при пополнении счета", "error")
     } finally {
       setIsLoading(false)
     }
