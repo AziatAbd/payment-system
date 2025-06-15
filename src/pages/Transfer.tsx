@@ -64,7 +64,14 @@ const Transfer: FC<TransferProps> = ({ user }) => {
     }
     try {
       await instance.post(apiLink, formData)
-      notify("Перевод выполнен успешно")
+
+      const balance = Number(localStorage.getItem("balance"))
+      if (Number(amount) > balance) {
+        notify("Недостаточно средств!", "error")
+      } else {
+        localStorage.setItem("balance", String(balance - +amount))
+        notify("Перевод выполнен успешно")
+      }
       setAmount("")
       setOtherCardNumber("")
       setCardPassword("")

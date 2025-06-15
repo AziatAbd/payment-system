@@ -2,14 +2,7 @@ import { useState } from "react"
 import { instance } from "../service/instance"
 import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
-import {
-  User,
-  Phone,
-  CreditCard,
-  Eye,
-  DollarSign,
-  Banknote,
-} from "lucide-react"
+import { User, Phone, Eye, Banknote } from "lucide-react"
 import useToast from "../hooks/useToast"
 
 // Заглушки для демонстрации (в реальном проекте замените на настоящие импорты)
@@ -44,22 +37,10 @@ const inputs = [
     icon: <Phone />,
   },
   {
-    type: "text",
-    placeholder: "Номер карты",
-    name: "numberOfCard",
-    icon: <CreditCard />,
-  },
-  {
     type: "password",
     placeholder: "Пароль карты",
     name: "password",
     icon: <Eye />,
-  },
-  {
-    type: "number",
-    placeholder: "Баланс",
-    name: "balance",
-    icon: <DollarSign />,
   },
   {
     type: "select",
@@ -95,7 +76,7 @@ export default function SignUp() {
       firstName: "",
       lastName: "",
       phoneNumber: "",
-      numberOfCard: "",
+      numberOfCard: "1234123412341234",
       password: "",
       paymentSystem: "VISA",
       balance: 0,

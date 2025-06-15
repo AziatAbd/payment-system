@@ -20,22 +20,14 @@ type HomeProps = {
 }
 
 const Home = ({ user, onLogout }: HomeProps) => {
-  const [balance] = useState(user.balance || 125750.5)
   const [recentTransactions] = useState([
     { type: "deposit", amount: 5000, date: "2 часа назад" },
     { type: "withdraw", amount: 2500, date: "Вчера" },
     { type: "deposit", amount: 10000, date: "3 дня назад" },
   ])
-
   const navigate = useNavigate()
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("ru-RU", {
-      style: "currency",
-      currency: "SOM",
-      minimumFractionDigits: 2,
-    }).format(amount)
-  }
+  const balance = Number(localStorage.getItem("balance"))
 
   const ActionButton = ({
     onClick,
@@ -113,7 +105,7 @@ const Home = ({ user, onLogout }: HomeProps) => {
 
           <div className="mb-4">
             <span className="text-4xl font-bold text-white">
-              {formatCurrency(balance)}
+              {balance} <span className="underline">C</span>
             </span>
           </div>
 
@@ -202,7 +194,7 @@ const Home = ({ user, onLogout }: HomeProps) => {
                     <div>
                       <p className="text-sm font-medium text-white">
                         {transaction.type === "deposit" ? "+" : "-"}
-                        {formatCurrency(transaction.amount)}
+                        {transaction.amount}
                       </p>
                       <p className="text-xs text-white/60">
                         {transaction.date}

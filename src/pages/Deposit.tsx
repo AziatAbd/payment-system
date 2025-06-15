@@ -39,6 +39,12 @@ const Deposit: FC<DepositProps> = ({ user }) => {
     try {
       await instance.post(apiLink, formData)
 
+      const balance = Number(localStorage.getItem("balance"))
+
+      const res = balance + +amount
+
+      localStorage.setItem("balance", String(res))
+
       notify("Счёт пополнен")
       navigate(-1)
       setAmount("")

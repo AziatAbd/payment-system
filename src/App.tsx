@@ -82,6 +82,7 @@ function App() {
   const handleLogin = (userData: UserType) => {
     try {
       localStorage.setItem("user", JSON.stringify(userData))
+      localStorage.setItem("balance", String(userData.balance))
       setUser(userData)
     } catch (error) {
       console.error("Ошибка при сохранении данных пользователя:", error)

@@ -39,7 +39,14 @@ const Withdraw: FC<WithdrawProps> = ({ user }) => {
         summa: parseFloat(amount),
       })
 
-      notify("Снятие успешно выполнено")
+      const balance = Number(localStorage.getItem("balance"))
+      if (Number(amount) > balance) {
+        notify("Недостаточно средств!", "error")
+      } else {
+        localStorage.setItem("balance", String(balance - +amount))
+        notify("Снятие успешно выполнено")
+      }
+
       navigate(-1)
       setAmount("")
       setCardPassword("")
